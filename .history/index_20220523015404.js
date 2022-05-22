@@ -23,16 +23,16 @@ async function run() {
     const serviceCollection = client.db('computer-parts').collection('products');
     const bookingCollection = client.db('computer-parts').collection('products');
 
-    app.get('/products', async (req, res) => {
+    app.get('/', async (req, res) => {
       const query = {};
       const cursor = serviceCollection.find(query);
-      const products = await cursor.toArray();
-      res.send(products);
+      const services = await cursor.toArray();
+      res.send(services);
     });
 
     // Warning: This is not the proper way to query multiple collection. 
     // After learning more about mongodb. use aggregate, lookup, pipeline, match, group
-    app.get('/availa', async(req, res) =>{
+    app.get('/available', async(req, res) =>{
       const date = req.query.date;
 
       // step 1:  get all services

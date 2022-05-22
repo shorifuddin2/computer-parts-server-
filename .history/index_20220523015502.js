@@ -32,7 +32,7 @@ async function run() {
 
     // Warning: This is not the proper way to query multiple collection. 
     // After learning more about mongodb. use aggregate, lookup, pipeline, match, group
-    app.get('/availa', async(req, res) =>{
+    app.get('/available', async(req, res) =>{
       const date = req.query.date;
 
       // step 1:  get all services
