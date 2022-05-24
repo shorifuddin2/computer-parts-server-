@@ -27,11 +27,11 @@ async function run() {
       const query = {};
       const cursor = serviceCollection.find(query);
       const product = await cursor.toArray();
-      res.send(product);
+      res.send(products);
     });
 
 
-    app.get('/productDetails/:id', async (req, res) => {
+    app.get('/productDetail/:id', async (req, res) => {
       const id = req.params.id;
       console.log(id)
       const query = { _id: ObjectId(id) };

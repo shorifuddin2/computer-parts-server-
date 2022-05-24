@@ -26,8 +26,8 @@ async function run() {
     app.get('/product', async (req, res) => {
       const query = {};
       const cursor = serviceCollection.find(query);
-      const product = await cursor.toArray();
-      res.send(product);
+      const products = await cursor.toArray();
+      res.send(products);
     });
 
 

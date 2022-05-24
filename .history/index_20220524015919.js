@@ -21,17 +21,17 @@ async function run() {
   try {
     await client.connect();
     const serviceCollection = client.db('computer-parts').collection('products');
-    
+    const bookingCollection = client.db('computer-parts').collection('products');
 
-    app.get('/product', async (req, res) => {
+    app.get('/products', async (req, res) => {
       const query = {};
       const cursor = serviceCollection.find(query);
-      const product = await cursor.toArray();
-      res.send(product);
+      const products = await cursor.toArray();
+      res.send(products);
     });
 
 
-    app.get('/productDetails/:id', async (req, res) => {
+    app.get('/product/:id', async (req, res) => {
       const id = req.params.id;
       console.log(id)
       const query = { _id: ObjectId(id) };

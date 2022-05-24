@@ -27,7 +27,7 @@ async function run() {
       const query = {};
       const cursor = serviceCollection.find(query);
       const product = await cursor.toArray();
-      res.send(product);
+      res.send(products);
     });
 
 
