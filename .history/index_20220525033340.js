@@ -75,7 +75,7 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-  res.send('Hello  computer parts!')
+  res.send('Hello  computer pa!')
 })
 
 app.listen(port, () => {
