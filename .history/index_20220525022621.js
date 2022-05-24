@@ -51,13 +51,6 @@ async function run() {
     
 
   //post
-  app.post('/product', async (req, res) =>{
-    const newProduct = req.body;
-    const result = await productCollection.insertOne(newProduct)
-    res.setEncoding(result)
-  })
-  
-  //post
   app.post('/reviews', async (req, res) =>{
     const newReview = req.body;
     const result = await reviewCollection.insertOne(newReview)

@@ -56,7 +56,6 @@ async function run() {
     const result = await productCollection.insertOne(newProduct)
     res.setEncoding(result)
   })
-  
   //post
   app.post('/reviews', async (req, res) =>{
     const newReview = req.body;
