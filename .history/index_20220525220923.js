@@ -58,7 +58,7 @@ async function run() {
   })
 
   //post
-  app.post('/review', async (req, res) =>{
+  app.post('/', async (req, res) =>{
     const newReview = req.body;
     const result = await reviewCollection.insertOne(newReview)
     res.setEncoding(result)
