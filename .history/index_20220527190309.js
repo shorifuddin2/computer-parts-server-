@@ -3,7 +3,6 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const { query } = require('express');
 const ObjectId = require('mongodb').ObjectId;
 
 const app = express();
@@ -19,22 +18,6 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
-function verifyJWT(req, res, next){
-  const authHeader =req.headers.authorization;
-  if(!authHeader){
-    return res.status(401).send({message: 'UnAuthorized access'});
-
-  }
-  const token = authHeader.split(' ')[1];
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function(err, decoded) {
-    if(error){
-      return res.status(403).send({massage: 'Forbidden access'})
-    }
-    req.decoded = decoded; 
-    next();
-  });
-   
-}
 
 async function run() {
   try {
@@ -42,15 +25,7 @@ async function run() {
     const productCollection = client.db('computer-parts').collection('products');
     const reviewCollection = client.db('computer-parts').collection('reviews');
     const userCollection = client.db('computer-parts').collection('users');
-    const bookingCollection = client.db('computer-parts').collection('booking');
-
     
-    app.post('/booking', async (req, res) => {
-      const booking = req.body;
-      console.log(booking);
-      const result = await bookingCollection.insertOne(booking);
-      res.send(result);
-  });
 
     app.get('/product', async (req, res) => {
       const query = {};
@@ -67,26 +42,7 @@ async function run() {
       res.send(review);
     });
 
-
-    app.get('/user', verifyJWT, async(req , res)=>{
-    const users = await userCollection.find().toArray();
-      res.send(users);
-    });
-
-    app.put('/user/:email',verifyJWT, async(req, res)=>{
-      const email = req.params.email;
-      const user = req.body;
-      const filter ={email}
-      const options ={upsert: true};
-      const updateDoc ={
-        $set: {role: admin},
-      };
-      const result=await userCollection.updateOne(filter,updateDoc);
-      
-      res.send(result);
-    });
-
-    app.put('/user/admin',async(req, res)=>{
+    app.put('/user/:email',async(req, res)=>{
       const email = req.params.email;
       const user = req.body;
       const filter ={email}
@@ -95,31 +51,19 @@ async function run() {
         $set:user,
       };
       const result=await userCollection.updateOne(filter,updateDoc,options);
-      const token = jwt.sign({email: email},process.env.ACCESS_TOKEN_SECRET, {expiresIn: '1d'})
-      res.send(result, token);
+      const token = jwt.sign({email: email}),process.env.
+      res.send(result);
     })
 
 
-    app.get('/products/:id', async (req, res) => {
+    app.get('/product/:id', async (req, res) => {
       const id = req.params.id;
       console.log(id)
-      const query = { _id: ObjectId(id) };
+      const query = { id: ObjectId(id) };
       const product = await productCollection.findOne(query);
       res.send(product);
   });
     
-  app.get('/booking', verifyJWT, async (req, res)=>{
-    const product = req.query.product;
-    const decodedEmail = req.decoded.email;
-    if(product=== decodedEmail){
-      const query = {product: product};
-      const booking = await productCollection.find(query).toArray();
-     return res.send(booking);
-    }
-else{
-  return res.status(403).send({message: 'forbidden access'});
-}
-  })
 
   //post
   app.post('/product', async (req, res) =>{
@@ -135,20 +79,8 @@ else{
     res.setEncoding(result)
   })
 
-  
-
-
-  // app.put('/api/users/profile', verifyUser, async (req, res) => {
-  //   const data = req.body;
-  //   const filter = { email: data.email };
-  //   const options = { upsert: true };
-  //   const updateDoc = {
-  //       $set: data,
-  //   }
-  //   const result = await profile.updateOne(filter, updateDoc, options);
-  //   res.send(result);
    
-}
+  }
   finally {
 
   }

@@ -68,25 +68,12 @@ async function run() {
     });
 
 
-    app.get('/user', verifyJWT, async(req , res)=>{
+    app.get('/user', B async(req , res)=>{
     const users = await userCollection.find().toArray();
       res.send(users);
     });
 
-    app.put('/user/:email',verifyJWT, async(req, res)=>{
-      const email = req.params.email;
-      const user = req.body;
-      const filter ={email}
-      const options ={upsert: true};
-      const updateDoc ={
-        $set: {role: admin},
-      };
-      const result=await userCollection.updateOne(filter,updateDoc);
-      
-      res.send(result);
-    });
-
-    app.put('/user/admin',async(req, res)=>{
+    app.put('/user/:email',async(req, res)=>{
       const email = req.params.email;
       const user = req.body;
       const filter ={email}

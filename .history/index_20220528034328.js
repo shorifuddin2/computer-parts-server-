@@ -73,7 +73,7 @@ async function run() {
       res.send(users);
     });
 
-    app.put('/user/:email',verifyJWT, async(req, res)=>{
+    app.put('/user/:email',async(req, res)=>{
       const email = req.params.email;
       const user = req.body;
       const filter ={email}
@@ -83,7 +83,7 @@ async function run() {
       };
       const result=await userCollection.updateOne(filter,updateDoc);
       
-      res.send(result);
+      res.send(result, token);
     });
 
     app.put('/user/admin',async(req, res)=>{

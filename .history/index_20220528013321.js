@@ -3,7 +3,6 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const { query } = require('express');
 const ObjectId = require('mongodb').ObjectId;
 
 const app = express();
@@ -68,25 +67,11 @@ async function run() {
     });
 
 
-    app.get('/user', verifyJWT, async(req , res)=>{
-    const users = await userCollection.find().toArray();
-      res.send(users);
-    });
+    app.gat('/user',async (req , res)=>{
+      const u
+    }
 
-    app.put('/user/:email',verifyJWT, async(req, res)=>{
-      const email = req.params.email;
-      const user = req.body;
-      const filter ={email}
-      const options ={upsert: true};
-      const updateDoc ={
-        $set: {role: admin},
-      };
-      const result=await userCollection.updateOne(filter,updateDoc);
-      
-      res.send(result);
-    });
-
-    app.put('/user/admin',async(req, res)=>{
+    app.put('/user/:email',async(req, res)=>{
       const email = req.params.email;
       const user = req.body;
       const filter ={email}
