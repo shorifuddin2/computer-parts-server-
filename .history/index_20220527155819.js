@@ -50,7 +50,7 @@ async function run() {
         $set:user,
       };
       const result=await userCollection.updateOne(filter,updateDoc,options);
-      res.send(result);
+      res.send
     })
 
 

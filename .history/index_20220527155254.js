@@ -43,14 +43,9 @@ async function run() {
 
     app.put('/user/:email',async(req, res)=>{
       const email = req.params.email;
-      const user = req.body;
       const filter ={email}
       const options ={upsert: true};
-      const updateDoc ={
-        $set:user,
-      };
-      const result=await userCollection.updateOne(filter,updateDoc,options);
-      res.send(result);
+      
     })
 
 

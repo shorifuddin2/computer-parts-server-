@@ -47,10 +47,11 @@ async function run() {
       const filter ={email}
       const options ={upsert: true};
       const updateDoc ={
-        $set:user,
+        $set:{
+          plot: `A harvest of random numbers, such as: ${Math.random()}`
+
+        },
       };
-      const result=await userCollection.updateOne(filter,updateDoc,options);
-      res.send(result);
     })
 
 

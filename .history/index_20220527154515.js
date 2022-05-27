@@ -23,7 +23,7 @@ async function run() {
     await client.connect();
     const productCollection = client.db('computer-parts').collection('products');
     const reviewCollection = client.db('computer-parts').collection('reviews');
-    const userCollection = client.db('computer-parts').collection('users');
+    const reviewCollection = client.db('computer-parts').collection('users');
     
 
     app.get('/product', async (req, res) => {
@@ -40,18 +40,6 @@ async function run() {
       const review = await cursor.toArray();
       res.send(review);
     });
-
-    app.put('/user/:email',async(req, res)=>{
-      const email = req.params.email;
-      const user = req.body;
-      const filter ={email}
-      const options ={upsert: true};
-      const updateDoc ={
-        $set:user,
-      };
-      const result=await userCollection.updateOne(filter,updateDoc,options);
-      res.send(result);
-    })
 
 
     app.get('/product/:id', async (req, res) => {

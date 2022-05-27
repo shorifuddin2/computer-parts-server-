@@ -47,10 +47,8 @@ async function run() {
       const filter ={email}
       const options ={upsert: true};
       const updateDoc ={
-        $set:user,
+        $set:user
       };
-      const result=await userCollection.updateOne(filter,updateDoc,options);
-      res.send(result);
     })
 
 
