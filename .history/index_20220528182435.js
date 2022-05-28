@@ -79,7 +79,7 @@ async function run() {
       const filter ={email}
       const options ={upsert: true};
       const updateDoc ={
-        $set: {role:admin},
+        $set: {role: admin},
       };
       const result=await userCollection.updateOne(filter,updateDoc);
       
@@ -109,7 +109,7 @@ async function run() {
       res.send(product);
   });
     
-  //Oder add
+  //Oder a
   app.get('/booking', async (req, res)=>{
     const email = req.query.email;
     const result = await bookingCollection.find({email : email}).toArray()

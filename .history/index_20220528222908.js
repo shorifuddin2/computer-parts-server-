@@ -19,26 +19,27 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
-function verifyJWT(req, res, next){
-  const authHeader =req.headers.authorization;
-  if(!authHeader){
-    return res.status(401).send({message: 'UnAuthorized access'});
+// function verifyJWT(req, res, next){
+//   const authHeader =req.headers.authorization;
+//   if(!authHeader){
+//     return res.status(401).send({message: 'UnAuthorized access'});
 
-  }
-  const token = authHeader.split(' ')[1];
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function(err, decoded) {
-    if(error){
-      return res.status(403).send({massage: 'Forbidden access'})
-    }
-    req.decoded = decoded; 
-    next();
-  });
+//   }
+//   const token = authHeader.split(' ')[1];
+//   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function(err, decoded) {
+//     if(error){
+//       return res.status(403).send({massage: 'Forbidden access'})
+//     }
+//     req.decoded = decoded; 
+//     next();
+//   });
    
-}
+// }
 
 async function run() {
   try {
     await client.connect();
+    console.log(client)
     const productCollection = client.db('computer-parts').collection('products');
     const reviewCollection = client.db('computer-parts').collection('reviews');
     const userCollection = client.db('computer-parts').collection('users');
@@ -79,7 +80,7 @@ async function run() {
       const filter ={email}
       const options ={upsert: true};
       const updateDoc ={
-        $set: {role:admin},
+        $set: {role: admin},
       };
       const result=await userCollection.updateOne(filter,updateDoc);
       
@@ -133,17 +134,18 @@ async function run() {
   
 
 
-  // app.put('/api/users/profile', verifyUser, async (req, res) => {
-  //   const data = req.body;
-  //   const filter = { email: data.email };
-  //   const options = { upsert: true };
-  //   const updateDoc = {
-  //       $set: data,
-  //   }
-  //   const result = await profile.updateOne(filter, updateDoc, options);
-  //   res.send(result);
+//   app.put('/api/users/profile', verifyJWT, async (req, res) => {
+//     const data = req.body;
+//     const filter = { email: data.email };
+//     const options = { upsert: true };
+//     const updateDoc = {
+//         $set: data,
+//     }
+//     const result = await profile.updateOne(filter, updateDoc, options);
+//     res.send(result);
    
-}
+// })
+  }
   finally {
 
   }

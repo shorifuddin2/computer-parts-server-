@@ -39,6 +39,7 @@ function verifyJWT(req, res, next){
 async function run() {
   try {
     await client.connect();
+    console.log
     const productCollection = client.db('computer-parts').collection('products');
     const reviewCollection = client.db('computer-parts').collection('reviews');
     const userCollection = client.db('computer-parts').collection('users');
@@ -79,7 +80,7 @@ async function run() {
       const filter ={email}
       const options ={upsert: true};
       const updateDoc ={
-        $set: {role:admin},
+        $set: {role: admin},
       };
       const result=await userCollection.updateOne(filter,updateDoc);
       
@@ -133,15 +134,15 @@ async function run() {
   
 
 
-  // app.put('/api/users/profile', verifyUser, async (req, res) => {
-  //   const data = req.body;
-  //   const filter = { email: data.email };
-  //   const options = { upsert: true };
-  //   const updateDoc = {
-  //       $set: data,
-  //   }
-  //   const result = await profile.updateOne(filter, updateDoc, options);
-  //   res.send(result);
+  app.put('/api/users/profile', verifyUser, async (req, res) => {
+    const data = req.body;
+    const filter = { email: data.email };
+    const options = { upsert: true };
+    const updateDoc = {
+        $set: data,
+    }
+    const result = await profile.updateOne(filter, updateDoc, options);
+    res.send(result);
    
 }
   finally {
