@@ -114,7 +114,7 @@ async function run() {
   
   app.get('/booking/:email', async (req, res)=>{
     const email = req.params.email;
-    console.log(email)
+    console.log
     const result = await bookingCollection.find({email : email}).toArray()
     res.send(result)
   })
