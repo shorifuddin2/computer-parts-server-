@@ -111,7 +111,7 @@ async function run() {
       res.send(product);
   });
     
-  //booking
+  //
   app.get('/booking/:email', async (req, res)=>{
     const email = req.params.email;
     console.log(email)
