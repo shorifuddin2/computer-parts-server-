@@ -82,7 +82,7 @@ async function run() {
       const updateDoc ={
         $set: {role:admin},
       };
-      const result=await userCollection.updateOne(filter,updateDoc,options);
+      const result=await userCollection.updateOne(filter,updateDoc,);
       
       res.send(result);
     });
@@ -96,7 +96,7 @@ async function run() {
       const updateDoc ={
         $set:user,
       };
-      const result=await userCollection.updateOne(filter,updateDoc);
+      const result=await userCollection.updateOne(filter,updateDoc,options);
       const token = jwt.sign({email: email},process.env.ACCESS_TOKEN_SECRET, {expiresIn: '1d'})
       res.send(result, token);
     })

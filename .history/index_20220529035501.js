@@ -48,7 +48,7 @@ async function run() {
     
     app.post('/booking', async (req, res) => {
       const booking = req.body;
-      console.log(booking);
+      // console.log(booking);
       const result = await bookingCollection.insertOne(booking);
       res.send(result);
   });
@@ -69,7 +69,7 @@ async function run() {
     });
 
 // add user
-    app.get('/user',  async(req , res)=>{
+    app.get('/user', verifyJWT, async(req , res)=>{
     const users = await userCollection.find().toArray();
       res.send(users);
     });
@@ -82,7 +82,7 @@ async function run() {
       const updateDoc ={
         $set: {role:admin},
       };
-      const result=await userCollection.updateOne(filter,updateDoc,options);
+      const result=await userCollection.updateOne(filter,updateDoc);
       
       res.send(result);
     });
@@ -90,30 +90,29 @@ async function run() {
     //Admin
     app.put('/user/admin',async(req, res)=>{
       const email = req.params.email;
-      const user = req.body;
+     
       const filter ={email}
-      const options ={upsert: true};
+     
       const updateDoc ={
-        $set:user,
+        $set:{role:'admin'},
       };
       const result=await userCollection.updateOne(filter,updateDoc);
-      const token = jwt.sign({email: email},process.env.ACCESS_TOKEN_SECRET, {expiresIn: '1d'})
+      
       res.send(result, token);
     })
 
 
     app.get('/products/:id', async (req, res) => {
       const id = req.params.id;
-      console.log(id)
+      // console.log(id)
       const query = { _id: ObjectId(id) };
       const product = await productCollection.findOne(query);
       res.send(product);
   });
     
-  
-  app.get('/booking/:email', async (req, res)=>{
-
-    const email = req.params.email;
+  //Oder add
+  app.get('/booking', async (req, res)=>{
+    const email = req.query.email;
     const result = await bookingCollection.find({email : email}).toArray()
     res.send(result)
   })
@@ -135,16 +134,16 @@ async function run() {
   
 
 
-  // app.put('/api/users/profile', verifyUser, async (req, res) => {
-  //   const data = req.body;
-  //   const filter = { email: data.email };
-  //   const options = { upsert: true };
-  //   const updateDoc = {
-  //       $set: data,
-  //   }
-  //   const result = await profile.updateOne(filter, updateDoc, options);
-  //   res.send(result);
-   
+  app.put('/api/users/profile', , async (req, res) => {
+    const data = req.body;
+    const filter = { email: data.email };
+    const options = { upsert: true };
+    const updateDoc = {
+        $set: data,
+    }
+    const result = await profile.updateOne(filter, updateDoc, options);
+    res.send(result);
+  })
 }
   finally {
 
