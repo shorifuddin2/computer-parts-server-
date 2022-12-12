@@ -15,8 +15,6 @@ app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.aoo1b.mongodb.net/?retryWrites=true&w=majority`;
 
-
-
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 function verifyJWT(req, res, next){
@@ -44,8 +42,34 @@ async function run() {
     const reviewCollection = client.db('computer-parts').collection('reviews');
     const userCollection = client.db('computer-parts').collection('users');
     const bookingCollection = client.db('computer-parts').collection('booking');
-
+    const paymentCollection = client.db('computer-parts').collection('payments');
     
+
+
+    // const verifyAdmin = async (req, res, next) => {
+    //   const requester = req.decoded.email;
+    //   const requesterAccount = await userCollection.findOne({ email: requester });
+    //   if (requesterAccount.role === 'admin') {
+    //     next();
+    //   }
+    //   else {
+    //     res.status(403).send({ message: 'forbidden' });
+    //   }
+    // }
+
+    // app.post('/create-payment-intent',  async(req, res) =>{
+    //   const product = req.body;
+    //   const price = product.price;
+    //   const amount = price*100;
+    //   const paymentIntent = await stripe.paymentIntents.create({
+    //     amount : amount,
+    //     currency: 'usd',
+    //     payment_method_types:['card']
+    //   });
+    //   res.send({clientSecret: paymentIntent.client_secret})
+    // });
+
+
     app.post('/booking', async (req, res) => {
       const booking = req.body;
       console.log(booking);
@@ -114,7 +138,7 @@ async function run() {
   //booking
   app.get('/booking/:email', async (req, res)=>{
     const email = req.params.email;
-    console.log(email)
+    // console.log(email)
     const result = await bookingCollection.find({email : email}).toArray()
     res.send(result)
   })
@@ -123,6 +147,7 @@ async function run() {
   app.post('/product', async (req, res) =>{
     const newProduct = req.body;
     const result = await productCollection.insertOne(newProduct)
+    // console.log(result)
     res.setEncoding(result)
   })
 
@@ -133,10 +158,26 @@ async function run() {
     res.setEncoding(result)
   })
 
-  
+  //Delete
+  app.delete("/booking/:id",async(req, res)=>{
+    const id = req.params.id 
+    const query= {_id:ObjectId(id)}
+    const result = await bookingCollection.deleteOne(query)
+    console.log(result)
+    res.send(result)
+  })
+ 
+
+  app.get('/booking/:id',  async(req, res) =>{
+    const id  = req.params.id;
+    const query = {_id: ObjectId(id)};
+    const booking = await bookingCollection.findOne(query);
+    res.send(booking);
+    })
 
 
-  // app.put('/api/users/profile', verifyUser, async (req, res) => {
+
+     // app.put('/api/users/profile', verifyUser, async (req, res) => {
   //   const data = req.body;
   //   const filter = { email: data.email };
   //   const options = { upsert: true };
@@ -145,7 +186,33 @@ async function run() {
   //   }
   //   const result = await profile.updateOne(filter, updateDoc, options);
   //   res.send(result);
-   
+  
+  // })
+
+
+  //   const result = await paymentCollection.insertOne(payment);
+  //   const updatedBooking = await bookingCollection.updateOne(filter, updatedDoc);
+  //   res.send(updatedBooking);
+  // })
+
+  // app.get('/booking', verifyJWT, verifyAdmin, async (req, res) => {
+  //   const booking = await doctorCollection.find().toArray();
+  //   res.send(booking);
+  // })
+
+  // app.post('/users', verifyJWT, verifyAdmin, async (req, res) => {
+  //   const doctor = req.body;
+  //   const result = await doctorCollection.insertOne(users);
+  //   res.send(result);
+  // });
+
+  // app.delete('/users/:email', verifyJWT, verifyAdmin, async (req, res) => {
+  //   const email = req.params.email;
+  //   const filter = { email: email };
+  //   const result = await doctorCollection.deleteOne(filter);
+  //   res.send(result);
+  // })
+
 }
   finally {
 
